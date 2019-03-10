@@ -2,13 +2,16 @@ let path = require('path');
 let ExtractTextPlugin = require('extract-text-webpack-plugin');
 let HtmlWebpackPlugin = require('html-webpack-plugin');
 let CleanWebpackPlugin = require('clean-webpack-plugin');
+
 let conf = {
-    entry: './src/js/index.js',
-    output: {
-        path: path.resolve(__dirname, './dist'),
-        filename: 'main.js',
-        //publicPath: 'dist/'
+    entry: {
+        index: './src/js/index.js'
     },
+    output: {
+        path: path.resolve(__dirname, './docs'),
+        filename: '[name].js'
+    },
+
     devServer: {
         overlay: true
     },
@@ -20,17 +23,17 @@ let conf = {
                 //exclude: '/node_modules/'
             },
             {
-             test: /\.css$/,
-             use: ExtractTextPlugin.extract({
-                //fallback: "style-loader",
-                 use: 'css-loader'
-             })
+                test: /\.css$/,
+                use: ExtractTextPlugin.extract({
+                    //fallback: "style-loader",
+                    use: 'css-loader'
+                })
             },
             {
-              test: /\.scss$/,
-              use: ExtractTextPlugin.extract({
-                  use: ['css-loader', 'sass-loader']
-              })
+                test: /\.scss$/,
+                use: ExtractTextPlugin.extract({
+                    use: ['css-loader', 'sass-loader']
+                })
             },
             {
                 test: /\.html$/,
@@ -48,27 +51,26 @@ let conf = {
                         }
                     }
                 ]
-            }
+            },
         ]
     },
     plugins: [
         new ExtractTextPlugin('style.css'),
         new HtmlWebpackPlugin({
-            template: 'src/index.html'
+            inject: true,
+            chunks: ['index'],
+            filename: 'index.html',
+            template: 'src/index.html',
+            // favicon: 'src/favicon.png'
         }),
-        new CleanWebpackPlugin(['dist'])
+
+        new CleanWebpackPlugin(['docs'])
     ]
 };
 module.exports = (env, options) => {
     let production = options.mode === 'production';
     conf.devtool = production
-                             ? 'source-map'
-                             : 'eval-sourcemap';
+        ? 'source-map'
+        : 'eval-sourcemap';
     return conf;
 };
-
-
-
-
-
-
