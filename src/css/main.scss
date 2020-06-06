@@ -1,1 +1,11 @@
+//layouts
+@import "layout/reset";
+@import "layout/layout";
+@import "layout/variables";
+@import "layout/extend";
+//partials
+@import "partials/grids";
+@import "partials/buttons";
+@import "partials/helpers";
+
 @import "test";
